@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MovieTest {
 
-    /*@Test
+    @Test
     void createMovie(){
         Movie movie = new Movie("Star Wars", LocalTime.of(12,30));
 
@@ -22,5 +22,5 @@ public class MovieTest {
 
         assertTrue(movie.equals(other));
         assertEquals(movie.hashCode(),other.hashCode());
-    }*/
+    }
 }
