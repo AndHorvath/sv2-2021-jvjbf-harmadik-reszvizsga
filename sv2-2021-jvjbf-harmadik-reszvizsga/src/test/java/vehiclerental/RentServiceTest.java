@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RentServiceTest {
 
-    /*RentService rentService;
+    RentService rentService;
     User user1 = new User("jack", "jack@email.com", 10000);
     User user2 = new User("john", "john@email.com", 10000);
     Rentable car = new Car("Abc-143", 45);
@@ -44,7 +44,9 @@ public class RentServiceTest {
     @Test
     void registerUserWithWrongUserNameTest() {
         UserNameIsAlreadyTakenException uniae =
-            assertThrows(UserNameIsAlreadyTakenException.class, () -> rentService.registerUser(new User("johnDoe", "johndoe@email.com", 10000)));
+            assertThrows(
+                UserNameIsAlreadyTakenException.class,
+                () -> rentService.registerUser(new User("johnDoe", "johndoe@email.com", 10000)));
 
         assertEquals("Username is taken!", uniae.getMessage());
     }
@@ -88,10 +90,8 @@ public class RentServiceTest {
 
     @Test
     void testActualRentingInOrder(){
-
         rentService.rent(user1, car, LocalTime.of(13, 12));
         rentService.rent(user2, bike, LocalTime.of(13, 10));
-
 
         assertEquals(List.of(bike,car), new ArrayList<>(rentService.getActualRenting().keySet()));
     }
@@ -106,5 +106,5 @@ public class RentServiceTest {
         assertEquals(List.of(bike),new ArrayList<>(rentService.getActualRenting().keySet()));
         assertEquals(user1.getBalance(),8650);
         assertNull(car.getRentingTime());
-    }*/
+    }
 }

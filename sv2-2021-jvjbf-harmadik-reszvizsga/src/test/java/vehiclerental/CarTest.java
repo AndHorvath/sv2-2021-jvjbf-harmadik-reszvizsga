@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class CarTest  {
 
-    /*Rentable car;
+    Rentable car;
 
     @BeforeEach
     void init(){
@@ -49,5 +49,5 @@ public class CarTest  {
         car.rent(LocalTime.of(13,12));
         other.rent(LocalTime.of(12,11));
         assertEquals(1,car.compareTo(other));
-    }*/
+    }
 }

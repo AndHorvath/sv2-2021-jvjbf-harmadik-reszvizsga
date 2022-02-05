@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserTest {
 
-    /*@Test
+    @Test
     void createUser(){
         User user = new User("johnDoe","johndoe@email.com",10000);
         assertEquals("johnDoe",user.getUserName());
@@ -19,5 +19,5 @@ public class UserTest {
         user.minusBalance(300);
 
         assertEquals(9700,user.getBalance());
-    }*/
+    }
 }
