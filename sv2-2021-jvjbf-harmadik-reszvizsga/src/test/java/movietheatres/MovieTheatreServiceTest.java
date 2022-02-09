@@ -33,9 +33,21 @@ public class MovieTheatreServiceTest {
     }
 
     @Test
+    void testFindMovieWithoutStreams() {
+        assertEquals(List.of("WestEnd", "Duna Plaza"), mvs.findMovieWithoutStreams("Star Wars"));
+        assertTrue(mvs.findMovieWithoutStreams("Indinana Jones").isEmpty());
+    }
+
+    @Test
     void testFindLatestShowTest() {
         assertEquals(LocalTime.of(20,45),mvs.findLatestShow("Lord Of The Rings"));
         assertEquals(LocalTime.of(19,45),mvs.findLatestShow("Star Wars"));
+    }
+
+    @Test
+    void testFindLatestShowTestWithoutStreams() {
+        assertEquals(LocalTime.of(20,45),mvs.findLatestShowWithoutStreams("Lord Of The Rings"));
+        assertEquals(LocalTime.of(19,45),mvs.findLatestShowWithoutStreams("Star Wars"));
     }
 
     @Test

@@ -3,6 +3,7 @@ package movietheatres;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -31,31 +32,36 @@ public class MovieTheatreService {
     }
 
     public List<String> findMovie(String title) {
-        List<String> movieTheatres = new ArrayList<>();
+        return shows.keySet().stream()
+            .filter(movieTheatre ->
+                shows.get(movieTheatre).stream().anyMatch(movie -> movie.getTitle().equals(title)))
+            .toList();
+    }
+
+    public List<String> findMovieWithoutStreams(String title) {
+        List<String> movieTheatresByTitle = new ArrayList<>();
         for (String movieTheatre : shows.keySet()) {
-            updateMovieTheatres(movieTheatres, movieTheatre, title);
+            updateMovieTheatresByTitle(movieTheatresByTitle, movieTheatre, title);
         }
-        return movieTheatres;
+        return movieTheatresByTitle;
     }
 
     public LocalTime findLatestShow(String title) {
+        return shows.values().stream()
+            .flatMap(Collection::stream)
+            .filter(movie -> movie.getTitle().equals(title))
+            .map(Movie::getStartTime)
+            .max(LocalTime::compareTo)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid title."));
+    }
+
+    public LocalTime findLatestShowWithoutStreams(String title) {
         boolean isFound = false;
-        LocalTime latestShow = LocalTime.of(0, 0);
+        Time latestShowByTitle = new Time(0);
         for (List<Movie> value : shows.values()) {
-            for (Movie movie : value) {
-                if (movie.getTitle().equals(title)) {
-                    isFound = true;
-                    if (movie.getStartTime().isAfter(latestShow)) {
-                        latestShow = movie.getStartTime();
-                    }
-                }
-            }
+            isFound |= updateLatestShowByTitle(value, latestShowByTitle, title);
         }
-        if (!isFound) {
-            throw new IllegalArgumentException("Invalid title.");
-        } else {
-            return latestShow;
-        }
+        return getLatestShow(latestShowByTitle, isFound);
     }
 
     // --- private methods ----------------------------------------------------
@@ -86,7 +92,7 @@ public class MovieTheatreService {
         }
     }
 
-    private void updateMovieTheatres(List<String> movieTheatres, String movieTheatre, String title) {
+    private void updateMovieTheatresByTitle(List<String> movieTheatres, String movieTheatre, String title) {
         for (Movie movie : shows.get(movieTheatre)) {
             if (movie.getTitle().equals(title)) {
                 if (!movieTheatres.contains(movieTheatre)) {
@@ -94,5 +100,26 @@ public class MovieTheatreService {
                 }
             }
         }
+    }
+
+    private boolean updateLatestShowByTitle(List<Movie> movies, Time latestShowByTitle, String title) {
+        boolean isFound = false;
+        for (Movie movie : movies) {
+            if (movie.getTitle().equals(title)) {
+                isFound = true;
+                if (latestShowByTitle != null &&
+                    movie.getStartTime().isAfter(latestShowByTitle.toLocalTime())) {
+                    latestShowByTitle.setTime(Time.valueOf(movie.getStartTime()).getTime());
+                }
+            }
+        }
+        return isFound;
+    }
+
+    private LocalTime getLatestShow(Time latestShowByTitle, boolean isFound) {
+        if (isFound) {
+            return latestShowByTitle.toLocalTime();
+        }
+        throw new IllegalArgumentException("Invalid title");
     }
 }
